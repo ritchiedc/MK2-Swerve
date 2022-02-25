@@ -16,12 +16,12 @@ import frc.robot.subsystems.SwerveDrivetrain;
  */
 public class RobotContainer {
 
-  private final XboxController controller = new XboxController(0);
+  public final XboxController m_driverController = new XboxController(0);
 
-  private final SwerveDrivetrain drivetrain = new SwerveDrivetrain();
+  public final SwerveDrivetrain m_drivetrain = new SwerveDrivetrain();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    drivetrain.setDefaultCommand(new SwerveDriveCommand(drivetrain, controller));
+    m_drivetrain.setDefaultCommand(new SwerveDriveCommand(m_drivetrain, m_driverController));
   }
 }

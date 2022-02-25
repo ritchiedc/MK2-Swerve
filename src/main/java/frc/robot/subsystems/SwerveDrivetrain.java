@@ -5,16 +5,17 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.ctre.phoenix.sensors.CANCoder;
+import com.kauailabs.navx.frc.AHRS;
 
-import edu.wpi.first.wpilibj.AnalogGyro;
-import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.SerialPort;
+
 import frc.robot.drivers.TurningEncoder;
 
 public class SwerveDrivetrain extends SubsystemBase {
@@ -53,19 +54,17 @@ public class SwerveDrivetrain extends SubsystemBase {
     )
   );
 
-  private final AnalogGyro gyro = new AnalogGyro(0);
+  private final Gyro m_gyro = new AHRS(SerialPort.Port.kMXP);
 
-  // TODO: Update these CAN device IDs to match your TalonFX + CANCoder device IDs
-  // TODO: Update module offsets to match your CANCoder offsets
   private SwerveModuleMK2[] modules = new SwerveModuleMK2[] {
-    new SwerveModuleMK2(new TalonFX(1), new TalonFX(2), new TurningEncoder(0)), // Front Left
-    new SwerveModuleMK2(new TalonFX(3), new TalonFX(4), new TurningEncoder(1)), // Front Right
-    new SwerveModuleMK2(new TalonFX(5), new TalonFX(6), new TurningEncoder(2)), // Back Left
-    new SwerveModuleMK2(new TalonFX(7), new TalonFX(8), new TurningEncoder(3))  // Back Right
+    new SwerveModuleMK2(new TalonFX(17), new TalonFX(18), new TurningEncoder(2)), // Front Left
+    new SwerveModuleMK2(new TalonFX(11), new TalonFX(13), new TurningEncoder(3)), // Front Right
+    new SwerveModuleMK2(new TalonFX(15), new TalonFX(16), new TurningEncoder(1)), // Back Left
+    new SwerveModuleMK2(new TalonFX(13), new TalonFX(14), new TurningEncoder(0))  // Back Right
   };
 
   public SwerveDrivetrain() {
-    gyro.reset(); 
+    m_gyro.reset(); 
   }
 
   /**
@@ -80,7 +79,7 @@ public class SwerveDrivetrain extends SubsystemBase {
     SwerveModuleState[] states =
       kinematics.toSwerveModuleStates(
         fieldRelative
-          ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, gyro.getRotation2d())
+          ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, m_gyro.getRotation2d())
           : new ChassisSpeeds(xSpeed, ySpeed, rot));
     SwerveDriveKinematics.desaturateWheelSpeeds(states, kMaxSpeed);
     for (int i = 0; i < states.length; i++) {
@@ -99,4 +98,26 @@ public class SwerveDrivetrain extends SubsystemBase {
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
   }
+
+  /** Resets the drive encoders to currently read a position of 0. */
+  public void resetTurningEncoders() {
+    for (int i=0; i < 4; ++i) {
+      modules[i].resetTurningEncoder();
+    }
+  }
+
+  /** Zeroes the heading of the robot. */
+  public void zeroHeading() {
+    m_gyro.reset();
+  }
+  
+  /**
+   * Returns the heading of the robot.
+   *
+   * @return the robot's heading in degrees, from -180 to 180
+    */
+  public double getHeading() {
+    return m_gyro.getRotation2d().getDegrees();
+  }
+    
 }

@@ -34,17 +34,17 @@ public class SwerveModuleMK2 {
         SwerveDrivetrain.kMaxAngularSpeed,
         SwerveDrivetrain.kMaxAngularSpeed));
 
-  private TalonFX driveMotor;
-  private TalonFX angleMotor;
-  private TurningEncoder turningEncoder;
+  private TalonFX m_driveMotor;
+  private TalonFX m_angleMotor;
+  private TurningEncoder m_turningEncoder;
  
   public SwerveModuleMK2(TalonFX driveMotor, TalonFX angleMotor, TurningEncoder turningEncoder) {
-    this.driveMotor = driveMotor;
+    this.m_driveMotor = driveMotor;
     driveMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 50);
 
 
-    this.angleMotor = angleMotor;
-    this.turningEncoder = turningEncoder;
+    this.m_angleMotor = angleMotor;
+    this.m_turningEncoder = turningEncoder;
     m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
 
     TalonFXConfiguration driveTalonFXConfiguration = new TalonFXConfiguration();
@@ -57,13 +57,12 @@ public class SwerveModuleMK2 {
     driveMotor.configAllSettings(driveTalonFXConfiguration);
   }
 
-
   /**
    * Gets the relative rotational position of the module
    * @return The relative rotational position of the angle motor in Degrees
    */
   public Rotation2d getAngle() {
-    return Rotation2d.fromDegrees(turningEncoder.getAngleRad());
+    return Rotation2d.fromDegrees(m_turningEncoder.getAngleRad());
   }
 
   /**
@@ -75,11 +74,20 @@ public class SwerveModuleMK2 {
     SwerveModuleState state = SwerveModuleState.optimize(desiredState, currentRotation);
 
     // Calculate turn output
-    double turnOutput = m_turningPIDController.calculate(turningEncoder.getAngleRad(), state.angle.getRadians());
-    angleMotor.set(TalonFXControlMode.PercentOutput, turnOutput);
+    double turnOutput = m_turningPIDController.calculate(m_turningEncoder.getAngleRad(), state.angle.getRadians());
+    m_angleMotor.set(TalonFXControlMode.PercentOutput, turnOutput);
 
     double feetPerSecond = Units.metersToFeet(state.speedMetersPerSecond);
-    driveMotor.set(TalonFXControlMode.PercentOutput, feetPerSecond / SwerveDrivetrain.kMaxSpeed);
+    m_driveMotor.set(TalonFXControlMode.PercentOutput, feetPerSecond / SwerveDrivetrain.kMaxSpeed);
+  }
+
+  /** Zeros all the SwerveModule encoders. */
+  public void resetTurningEncoder() {
+    m_turningEncoder.reset();
+  }
+
+  public void resetDrivingEncoder() {
+    m_driveMotor.setSelectedSensorPosition(0.0);
   }
 
 }
