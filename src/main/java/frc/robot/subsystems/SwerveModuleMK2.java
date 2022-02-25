@@ -42,7 +42,6 @@ public class SwerveModuleMK2 {
     this.m_driveMotor = driveMotor;
     driveMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 50);
 
-
     this.m_angleMotor = angleMotor;
     this.m_turningEncoder = turningEncoder;
     m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
@@ -62,7 +61,7 @@ public class SwerveModuleMK2 {
    * @return The relative rotational position of the angle motor in Degrees
    */
   public Rotation2d getAngle() {
-    return Rotation2d.fromDegrees(m_turningEncoder.getAngleRad());
+    return Rotation2d.fromDegrees(m_turningEncoder.getAngleDeg());
   }
 
   /**
