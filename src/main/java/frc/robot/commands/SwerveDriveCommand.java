@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -27,14 +28,14 @@ public class SwerveDriveCommand extends CommandBase {
     // Get the x speed. We are inverting this because Xbox controllers return
     // negative values when we push forward.
     final var xSpeed =
-      -xspeedLimiter.calculate(controller.getLeftY())
+      -xspeedLimiter.calculate(MathUtil.applyDeadband(controller.getLeftY(), 0.15))
         * SwerveDrivetrain.kMaxSpeed;
 
     // Get the y speed or sideways/strafe speed. We are inverting this because
     // we want a positive value when we pull to the left. Xbox controllers
     // return positive values when you pull to the right by default.
     final var ySpeed =
-      -yspeedLimiter.calculate(controller.getLeftX())
+      -yspeedLimiter.calculate(MathUtil.applyDeadband(controller.getLeftX(), 0.15))
         * SwerveDrivetrain.kMaxSpeed;
 
     // Get the rate of angular rotation. We are inverting this because we want a
@@ -42,7 +43,7 @@ public class SwerveDriveCommand extends CommandBase {
     // mathematics). Xbox controllers return positive values when you pull to
     // the right by default.
     final var rot =
-      -rotLimiter.calculate(controller.getRightX())
+      -rotLimiter.calculate(MathUtil.applyDeadband(controller.getRightX(), 0.15))
         * SwerveDrivetrain.kMaxAngularSpeed;
 
     boolean fieldRelative = controller.getLeftBumper();

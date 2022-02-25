@@ -37,20 +37,20 @@ public class SwerveDrivetrain extends SubsystemBase {
    */
   private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
     new Translation2d(
-      Units.inchesToMeters(10),
-      Units.inchesToMeters(10)
+      Units.inchesToMeters(11.5),
+      Units.inchesToMeters(11.5)
     ),
     new Translation2d(
-      Units.inchesToMeters(10),
-      Units.inchesToMeters(-10)
+      Units.inchesToMeters(11.5),
+      Units.inchesToMeters(-11.5)
     ),
     new Translation2d(
-      Units.inchesToMeters(-10),
-      Units.inchesToMeters(10)
+      Units.inchesToMeters(-11.5),
+      Units.inchesToMeters(11.5)
     ),
     new Translation2d(
-      Units.inchesToMeters(-10),
-      Units.inchesToMeters(-10)
+      Units.inchesToMeters(-11.5),
+      Units.inchesToMeters(-11.5)
     )
   );
 
@@ -58,7 +58,7 @@ public class SwerveDrivetrain extends SubsystemBase {
 
   private SwerveModuleMK2[] modules = new SwerveModuleMK2[] {
     new SwerveModuleMK2(new TalonFX(17), new TalonFX(18), new TurningEncoder(2)), // Front Left
-    new SwerveModuleMK2(new TalonFX(11), new TalonFX(13), new TurningEncoder(3)), // Front Right
+    new SwerveModuleMK2(new TalonFX(11), new TalonFX(12), new TurningEncoder(3)), // Front Right
     new SwerveModuleMK2(new TalonFX(15), new TalonFX(16), new TurningEncoder(1)), // Back Left
     new SwerveModuleMK2(new TalonFX(13), new TalonFX(14), new TurningEncoder(0))  // Back Right
   };
