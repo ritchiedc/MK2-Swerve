@@ -79,7 +79,7 @@ public class SwerveModuleMK2 {
 
     // Calculate turn output
     double turnOutput = m_turningPIDController.calculate(m_turningEncoder.getAngleRad(), state.angle.getRadians());
-    m_angleMotor.set(TalonFXControlMode.PercentOutput, turnOutput / 0.2/*(SwerveDrivetrain.kMaxAngularSpeed)*/);
+    m_angleMotor.set(TalonFXControlMode.PercentOutput, turnOutput * 0.2);
 
     double feetPerSecond = Units.metersToFeet(state.speedMetersPerSecond);
     // m_driveMotor.set(TalonFXControlMode.PercentOutput, feetPerSecond / SwerveDrivetrain.kMaxSpeed);
