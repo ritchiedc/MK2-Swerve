@@ -21,7 +21,7 @@ import frc.robot.drivers.TurningEncoder;
 public class SwerveDrivetrain extends SubsystemBase {
 
   public static final double kMaxSpeed = Units.feetToMeters(13.6); // 13.6 feet per second
-  public static final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second
+  public static final double kMaxAngularSpeed = 2 * Math.PI;       // 1 rotation per second
 
   /**
    * TODO: These are example values and will need to be adjusted for your robot!
